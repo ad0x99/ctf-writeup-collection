@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CorpNet NOC — Sign In</title>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 16 16">
+            <path
+              d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM11 9h2v2h2v2h-2v2h-2v-2H9v-2h2z"
+            />
+          </svg>
+        </div>
+        <div class="brand-name">
+          CorpNet <span>Network Operations Centre</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="status-pill">
+          <span class="dot"></span><span>SYSTEMS NOMINAL</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-body">
+      <div class="login-wrap">
+        <div class="login-eyebrow">Operator Access</div>
+        <h1 class="login-title"><strong>Sign In</strong> to NOC Portal</h1>
+        <p class="login-sub">
+          Restricted to authorised personnel. All sessions are monitored and
+          logged.
+        </p>
+
+        <div class="card">
+          <div class="card-stripe"></div>
+          <div class="card-body">
+            <form method="POST" action="/internal" autocomplete="off">
+              <div class="field">
+                <label for="username">Username</label>
+                <div class="input-wrap">
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="operator id"
+                    autofocus
+                    autocomplete="off"
+                    spellcheck="false"
+                  />
+                  <svg viewBox="0 0 16 16">
+                    <path
+                      d="M8 8a3 3 0 100-6 3 3 0 000 6zm-5 5a5 5 0 0110 0H3z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <div class="field">
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="••••••••••••"
+                    autocomplete="current-password"
+                  />
+                  <svg viewBox="0 0 16 16">
+                    <path
+                      d="M11 6V5a3 3 0 00-6 0v1H3v8h10V6h-2zM7 5a1 1 0 012 0v1H7V5zm1 6a1 1 0 110-2 1 1 0 010 2z"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <button type="submit" class="btn-submit">
+                <svg viewBox="0 0 16 16">
+                  <path
+                    d="M10 3h3v10h-3v-2H8v-1h2V6H8V5h2V3zM1 5h6v1H3v4h4v1H1V5z"
+                  />
+                </svg>
+                Authenticate
+              </button>
+            </form>
+          </div>
+          <div class="card-foot">
+            <span class="foot-item">
+              <svg viewBox="0 0 16 16">
+                <path
+                  d="M8 1l6 3v4c0 3.5-2.5 6.5-6 7.5C2.5 14.5 0 11.5 0 8V4l8-3z"
+                />
+              </svg>
+              Sec-Level: RESTRICTED
+            </span>
+            <span class="foot-item">
+              <svg viewBox="0 0 16 16">
+                <path
+                  d="M8 1a7 7 0 100 14A7 7 0 008 1zm.5 7.5v3h-1v-3h1zm0-4v2h-1V4.5h1z"
+                />
+              </svg>
+              Session timeout: 30 min
+            </span>
+            <span class="foot-item">v2.4.1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="page-footer">
+      CORPNET INFRASTRUCTURE &nbsp;|&nbsp; INTERNAL USE ONLY &nbsp;|&nbsp;
+      UNAUTHORISED ACCESS IS PROHIBITED
+    </footer>
+  </body>
+</html>
