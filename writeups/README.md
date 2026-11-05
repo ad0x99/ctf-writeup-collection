@@ -1,13 +1,11 @@
 # Writeups
 
-Polished, readable writeups of completed (or partially completed) investigations. Each file is `writeups/<target-name>.md` and corresponds to `investigations/<target-name>/investigation.md`.
+Polished, readable writeups of completed (or partially completed) investigations. Each file is `writeups/<platform>/<target-name>.md` and corresponds to `investigations/<platform>/<target-name>/investigation.md`. Writeups are grouped by `<platform>` for the same reason investigations are: it keeps the collection navigable as it grows.
 
 ## Supported sources
 
 - CTF challenges (TryHackMe, Hack The Box, events) and personal labs: narrative writeup.
 - Bug bounty engagements: vulnerability report structure (summary, affected asset, steps to reproduce, impact, remediation) instead of a flag section.
-
-Writeups written before the investigation workflow existed live under `TryHackMe/<Room>/` and are left as they are.
 
 ## Generating a writeup
 
@@ -15,7 +13,7 @@ Writeups written before the investigation workflow existed live under `TryHackMe
 /ctf-writeup <target-name>
 ```
 
-The skill locates the investigation, reads it in full, inspects referenced evidence, and writes a separate document here. If several investigations exist and none is named, it asks which one. If a writeup already exists, it asks whether to update it, create a new version, or use another destination. It never modifies the investigation file.
+Naming it by `<target-name>` alone is enough; the skill searches across every platform folder in `investigations/` for a match and asks if there's ambiguity (the same target name under more than one platform) or no name given. You can also give the full `<platform>/<target-name>` directly if you already know it. The skill locates the investigation, reads it in full, inspects referenced evidence, and writes a separate document here, under the matching `writeups/<platform>/` folder. If several investigations exist and none is named, it asks which one. If a writeup already exists, it asks whether to update it, create a new version, or use another destination. It never modifies the investigation file.
 
 ## Investigation notes vs. writeups
 
